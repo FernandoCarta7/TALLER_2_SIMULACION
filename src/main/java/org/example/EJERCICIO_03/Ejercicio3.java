@@ -2,12 +2,14 @@ package org.example.EJERCICIO_03;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.LongStream;
 
 public class Ejercicio3 {
     public static void main(String[] args) {
 
         List<Double> listaXi = periodoDeVida(121,553,177,23);
-        histograma(listaXi);
+        double [][] histograma = histograma(listaXi);
+        pruebaChiCuadrada(histograma, 177, listaXi.size());
 
     }
 
@@ -15,6 +17,7 @@ public class Ejercicio3 {
 
         List<Integer> residuos = new ArrayList<>();
         List<Double> aleatorios = new ArrayList<>();
+
 
         int xi = ( ( a * x0 ) + c ) % m;
         double ri = (double) xi/( m - 1 );
@@ -29,6 +32,7 @@ public class Ejercicio3 {
 
         System.out.println("Ciclo de vida: " + residuos.size() + " iteraciones");
         pruebaMedia(aleatorios,m);
+
 
         return aleatorios;
     }
@@ -106,6 +110,7 @@ public class Ejercicio3 {
                         frecuencia[i] = frecuencia[i] + 1;
                     }
                 }
+
             }
         }
         histograma = new double[2][intervalo.length];
@@ -117,8 +122,29 @@ public class Ejercicio3 {
             }
         }
 
-        System.out.println("Cualquier cosa");
-
+        for (int i = 0; i < listaXi.size(); i++) {
+            System.out.printf(listaXi.get(i) + ", ");
+        }
         return histograma;
+    }
+
+    public static double pruebaChiCuadrada( double[][] histograma, int m, int sizeXi ){
+
+        int k = histograma[0].length; // Tamaño del intervalo de la frecuencia
+        double frecuenciaEsperada = (double) (sizeXi) / k; //Cantidad de datos / intervalo de la frecuencia
+        double restaFrecuencias = 0.0;
+        double sumatoria = 0.0;
+
+        //int gradoLibertad = k-1;
+
+        for (int i = 0; i < k ; i++) {
+            restaFrecuencias = histograma[0][i] - frecuenciaEsperada;
+            restaFrecuencias = restaFrecuencias * restaFrecuencias;
+            sumatoria = sumatoria + ( restaFrecuencias / frecuenciaEsperada);
+        }
+        System.out.println("\n\t Prueba chi cuadrada x^2 : " + sumatoria);
+
+
+        return sumatoria;
     }
 }
